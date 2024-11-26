@@ -7,6 +7,8 @@
 # General application configuration
 import Config
 
+config :automated_agency, :ash_domains, [AutomatedAgency.Websites]
+
 config :ash,
   include_embedded_source_by_default?: false,
   default_page_type: :keyset,
