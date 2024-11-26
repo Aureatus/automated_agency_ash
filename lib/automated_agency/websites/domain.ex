@@ -15,7 +15,7 @@ defmodule AutomatedAgency.Websites.Domain do
   attributes do
     uuid_primary_key :id
 
-    attribute :domain, :string
+    attribute :domain, :string, allow_nil?: false
   end
 
   relationships do

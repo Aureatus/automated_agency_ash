@@ -15,10 +15,10 @@ defmodule AutomatedAgency.Websites.ImprovedPage do
   attributes do
     uuid_primary_key :id
 
-    attribute :html, :string
+    attribute :html, :string, allow_nil?: false
   end
 
   relationships do
-    belongs_to :page, AutomatedAgency.Websites.Page
+    belongs_to :page, AutomatedAgency.Websites.Page, allow_nil?: false
   end
 end

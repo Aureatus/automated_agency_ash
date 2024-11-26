@@ -15,10 +15,10 @@ defmodule AutomatedAgency.Websites.Keyword do
   attributes do
     uuid_primary_key :id
 
-    attribute :keyword, :string
+    attribute :keyword, :string, allow_nil?: false
   end
 
   relationships do
-    belongs_to :topic_analysis, AutomatedAgency.Websites.TopicAnalysis
+    belongs_to :topic_analysis, AutomatedAgency.Websites.TopicAnalysis, allow_nil?: false
   end
 end

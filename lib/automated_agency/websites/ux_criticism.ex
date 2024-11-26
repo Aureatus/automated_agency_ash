@@ -15,12 +15,12 @@ defmodule AutomatedAgency.Websites.UxCriticism do
   attributes do
     uuid_primary_key :id
 
-    attribute :severity, :atom, constraints: [one_of: [:low, :medium, :high]]
-    attribute :criticism, :string
-    attribute :explanation, :string
+    attribute :severity, :atom, constraints: [one_of: [:low, :medium, :high]], allow_nil?: false
+    attribute :criticism, :string, allow_nil?: false
+    attribute :explanation, :string, allow_nil?: false
   end
 
   relationships do
-    belongs_to :ux_analysis, AutomatedAgency.Websites.UxAnalysis
+    belongs_to :ux_analysis, AutomatedAgency.Websites.UxAnalysis, allow_nil?: false
   end
 end

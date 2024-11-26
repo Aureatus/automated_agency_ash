@@ -15,11 +15,11 @@ defmodule AutomatedAgency.Websites.Screenshot do
   attributes do
     uuid_primary_key :id
 
-    attribute :desktop_data, :string
-    attribute :mobile_data, :string
+    attribute :desktop_data, :string, allow_nil?: false
+    attribute :mobile_data, :string, allow_nil?: false
   end
 
   relationships do
-    belongs_to :page, AutomatedAgency.Websites.Page
+    belongs_to :page, AutomatedAgency.Websites.Page, allow_nil?: false
   end
 end

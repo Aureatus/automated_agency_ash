@@ -19,6 +19,6 @@ defmodule AutomatedAgency.Websites.UxAnalysis do
   relationships do
     has_many :ux_criticisms, AutomatedAgency.Websites.UxCriticism
 
-    belongs_to :page, AutomatedAgency.Websites.Page
+    belongs_to :page, AutomatedAgency.Websites.Page, allow_nil?: false
   end
 end

@@ -15,12 +15,12 @@ defmodule AutomatedAgency.Websites.TopicAnalysis do
   attributes do
     uuid_primary_key :id
 
-    attribute :primary_category, :string
+    attribute :primary_category, :string, allow_nil?: false
   end
 
   relationships do
     has_many :keywords, AutomatedAgency.Websites.Keyword
 
-    belongs_to :page, AutomatedAgency.Websites.Page
+    belongs_to :page, AutomatedAgency.Websites.Page, allow_nil?: false
   end
 end
