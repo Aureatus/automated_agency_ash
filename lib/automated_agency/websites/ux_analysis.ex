@@ -1,5 +1,10 @@
 defmodule AutomatedAgency.Websites.UxAnalysis do
-  use Ash.Resource, domain: AutomatedAgency.Websites
+  use Ash.Resource, domain: AutomatedAgency.Websites, data_layer: AshPostgres.DataLayer
+
+  postgres do
+    table "ux_analyses"
+    repo AutomatedAgency.Repo
+  end
 
   actions do
     defaults [:read]
