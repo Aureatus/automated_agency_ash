@@ -10,5 +10,6 @@ defmodule AutomatedAgency.Websites do
     resource AutomatedAgency.Websites.UxCriticism
     resource AutomatedAgency.Websites.SpeedAnalysis
     resource AutomatedAgency.Websites.ImprovedPage
+    resource AutomatedAgency.Websites.Screenshot
   end
 end

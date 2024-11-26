@@ -26,5 +26,6 @@ defmodule AutomatedAgency.Websites.Page do
     has_one :topic_analysis, AutomatedAgency.Websites.TopicAnalysis
     has_one :ux_analysis, AutomatedAgency.Websites.UxAnalysis
     has_one :improved_page, AutomatedAgency.Websites.ImprovedPage
+    has_one :screenshot, AutomatedAgency.Websites.Screenshot
   end
 end
