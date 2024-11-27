@@ -9,7 +9,7 @@ defmodule AutomatedAgency.Websites.Keyword do
   actions do
     defaults [:read]
 
-    create :create
+    create :create, accept: [:topic_analysis_id, :keyword]
   end
 
   attributes do

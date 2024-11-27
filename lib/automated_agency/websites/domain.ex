@@ -9,7 +9,7 @@ defmodule AutomatedAgency.Websites.Domain do
   actions do
     defaults [:read]
 
-    create :create
+    create :create, accept: [:domain]
   end
 
   attributes do

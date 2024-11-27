@@ -9,7 +9,7 @@ defmodule AutomatedAgency.Websites.UxCriticism do
   actions do
     defaults [:read]
 
-    create :create
+    create :create, accept: [:ux_analysis_id, :severity, :criticism, :explanation]
   end
 
   attributes do

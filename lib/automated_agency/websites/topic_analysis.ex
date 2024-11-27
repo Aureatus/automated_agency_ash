@@ -9,7 +9,7 @@ defmodule AutomatedAgency.Websites.TopicAnalysis do
   actions do
     defaults [:read]
 
-    create :create
+    create :create, accept: [:page_id, :primary_category]
   end
 
   attributes do

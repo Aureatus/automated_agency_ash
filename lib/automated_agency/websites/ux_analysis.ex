@@ -9,7 +9,7 @@ defmodule AutomatedAgency.Websites.UxAnalysis do
   actions do
     defaults [:read]
 
-    create :create
+    create :create, accept: [:page_id]
   end
 
   attributes do

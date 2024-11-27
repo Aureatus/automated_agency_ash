@@ -9,7 +9,7 @@ defmodule AutomatedAgency.Websites.SpeedAnalysis do
   actions do
     defaults [:read]
 
-    create :create
+    create :create, accept: [:page_id, :desktop_data, :mobile_data]
   end
 
   attributes do
