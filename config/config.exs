@@ -93,6 +93,27 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :wallaby,
+  hackney_options: [timeout: :infinity, recv_timeout: :infinity],
+  driver: Wallaby.Chrome,
+  chromedriver: [
+    binary: "priv/chrome/chrome-headless-shell-linux64/chrome-headless-shell",
+    path: "priv/chrome/chromedriver-linux64/chromedriver",
+    headless: false,
+    capabilities: %{
+      chromeOptions: %{
+        args: [
+          "--headless",
+          "--no-sandbox",
+          "window-size=1600,900",
+          "--fullscreen",
+          "--disable-gpu",
+          "--disable-dev-shm-usage"
+        ]
+      }
+    }
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
