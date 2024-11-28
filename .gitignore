@@ -35,3 +35,6 @@ automated_agency-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Chrome drivers
+/priv/chrome
+
