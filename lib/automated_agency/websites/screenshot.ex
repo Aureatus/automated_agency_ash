@@ -9,14 +9,14 @@ defmodule AutomatedAgency.Websites.Screenshot do
   actions do
     defaults [:read]
 
-    create :create, accept: [:page_id, :desktop_data, :mobile_data]
+    create :create, accept: [:page_id, :desktop_data, :mobile_data], primary?: true
   end
 
   attributes do
     uuid_primary_key :id
 
-    attribute :desktop_data, :string, allow_nil?: false
-    attribute :mobile_data, :string, allow_nil?: false
+    attribute :desktop_data, :binary, allow_nil?: false
+    attribute :mobile_data, :binary, allow_nil?: false
   end
 
   relationships do
