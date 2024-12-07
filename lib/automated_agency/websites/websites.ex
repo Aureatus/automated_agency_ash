@@ -8,6 +8,7 @@ defmodule AutomatedAgency.Websites do
 
     resource AutomatedAgency.Websites.Page do
       define :create_page, action: :create, args: [:domain_id, :url, :html]
+      define :create_page_from_url, action: :create_from_url, args: [:domain_id, :url]
     end
 
     resource AutomatedAgency.Websites.TopicAnalysis do

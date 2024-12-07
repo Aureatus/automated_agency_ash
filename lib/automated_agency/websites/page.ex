@@ -10,6 +10,14 @@ defmodule AutomatedAgency.Websites.Page do
     defaults [:read]
 
     create :create, accept: [:domain_id, :url, :html]
+
+    create :create_from_url do
+      accept [:domain_id, :url]
+      # argument :domain_id, :uuid, allow_nil?: false
+      # argument :url, :string, allow_nil?: false
+
+      change AutomatedAgency.Websites.Page.FetchWebPage
+    end
   end
 
   attributes do
