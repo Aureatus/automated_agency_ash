@@ -65,7 +65,8 @@ defmodule AutomatedAgency.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:wallaby, "~> 0.30"},
-      {:readability, "~> 0.12"}
+      {:readability, "~> 0.12"},
+      {:instructor, git: "https://github.com/thmsmlr/instructor_ex.git"}
     ]
   end
 

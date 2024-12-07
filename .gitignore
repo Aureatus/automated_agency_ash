@@ -38,3 +38,5 @@ npm-debug.log
 # Chrome drivers
 /priv/chrome
 
+# Environment variables
+.env
