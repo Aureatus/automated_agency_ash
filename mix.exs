@@ -66,6 +66,7 @@ defmodule AutomatedAgency.MixProject do
       {:bandit, "~> 1.5"},
       {:wallaby, "~> 0.30"},
       {:readability, "~> 0.12"},
+      {:html_entities, "~> 0.5"},
       {:instructor, git: "https://github.com/thmsmlr/instructor_ex.git"}
     ]
   end
