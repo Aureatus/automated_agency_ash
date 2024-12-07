@@ -36,4 +36,8 @@ defmodule AutomatedAgency.Websites.Page do
     has_one :improved_page, AutomatedAgency.Websites.ImprovedPage, allow_nil?: false
     has_one :screenshot, AutomatedAgency.Websites.Screenshot, allow_nil?: false
   end
+
+  identities do
+    identity :unique_url, [:url]
+  end
 end
