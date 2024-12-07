@@ -10,6 +10,12 @@ defmodule AutomatedAgency.Websites.TopicAnalysis do
     defaults [:read]
 
     create :create, accept: [:page_id, :primary_category]
+
+    create :create_from_page do
+      accept [:page_id]
+
+      change AutomatedAgency.Websites.TopicAnalysis.FetchAnalysis
+    end
   end
 
   attributes do
