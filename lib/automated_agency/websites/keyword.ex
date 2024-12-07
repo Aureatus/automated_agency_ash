@@ -21,4 +21,8 @@ defmodule AutomatedAgency.Websites.Keyword do
   relationships do
     belongs_to :topic_analysis, AutomatedAgency.Websites.TopicAnalysis, allow_nil?: false
   end
+
+  identities do
+    identity :unique_keyword, [:keyword, :topic_analysis_id]
+  end
 end
