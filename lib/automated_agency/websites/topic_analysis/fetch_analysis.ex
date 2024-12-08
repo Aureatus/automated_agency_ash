@@ -5,18 +5,19 @@ defmodule AutomatedAgency.Websites.TopicAnalysis.FetchAnalysis do
   def change(changeset, _, _) do
     Ash.Changeset.before_transaction(changeset, fn changeset ->
       page_id = Ash.Changeset.get_attribute(changeset, :page_id)
-      page = Ash.get!(AutomatedAgency.Websites.Page, page_id)
+      %{url: url, html: html} = Ash.get!(AutomatedAgency.Websites.Page, page_id)
 
-      topic_analysis = get_topic_analysis_info(page.url, page.html)
+      %{primary_category: primary_category, keywords: keywords} =
+        generate_topic_analysis(url, html)
 
       changeset
       |> Ash.Changeset.force_change_attribute(
         :primary_category,
-        topic_analysis.primary_category
+        primary_category
       )
       |> Ash.Changeset.manage_relationship(
         :keywords,
-        Enum.map(topic_analysis.keywords, &%{keyword: &1}),
+        Enum.map(keywords, &%{keyword: &1}),
         type: :create
       )
     end)
@@ -28,8 +29,8 @@ defmodule AutomatedAgency.Websites.TopicAnalysis.FetchAnalysis do
     field(:keywords, {:array, :string})
   end
 
-  def get_topic_analysis_info(url, html) do
-    page_info = get_key_text_from_html(html)
+  def generate_topic_analysis(url, html) do
+    page_info = extract_key_text_from_html(html)
 
     {:ok, page_info} =
       Instructor.chat_completion(
@@ -50,7 +51,7 @@ defmodule AutomatedAgency.Websites.TopicAnalysis.FetchAnalysis do
     page_info
   end
 
-  defp get_key_text_from_html(html) do
+  defp extract_key_text_from_html(html) do
     html |> HtmlEntities.decode() |> Readability.article() |> Readability.readable_text()
   end
 end
