@@ -72,9 +72,6 @@ defmodule AutomatedAgency.Websites.SpeedAnalysis.FetchAnalysis do
       |> Enum.map(fn {key, val} -> {String.to_existing_atom(key), val["score"]} end)
       |> Enum.into(%{})
 
-    IO.inspect(core_web_vital_scores)
-    IO.inspect(lighthouse_scores)
-
     %{core_web_vital_scores: core_web_vital_scores, lighthouse_scores: lighthouse_scores}
   end
 
