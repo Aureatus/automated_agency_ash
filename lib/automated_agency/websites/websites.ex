@@ -41,6 +41,7 @@ defmodule AutomatedAgency.Websites do
 
     resource AutomatedAgency.Websites.ImprovedPage do
       define :create_improved_page, action: :create, args: [:page_id, :html]
+      define :create_improved_page_for_existing_page, action: :create_for_page, args: [:page_id]
     end
 
     resource AutomatedAgency.Websites.Screenshot do

@@ -10,6 +10,12 @@ defmodule AutomatedAgency.Websites.ImprovedPage do
     defaults [:read]
 
     create :create, accept: [:page_id, :html]
+
+    create :create_for_page do
+      accept [:page_id]
+
+      change AutomatedAgency.Websites.ImprovedPage.Generate
+    end
   end
 
   attributes do
