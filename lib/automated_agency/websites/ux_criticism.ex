@@ -23,4 +23,8 @@ defmodule AutomatedAgency.Websites.UxCriticism do
   relationships do
     belongs_to :ux_analysis, AutomatedAgency.Websites.UxAnalysis, allow_nil?: false
   end
+
+  identities do
+    identity :unique_criticism, [:criticism, :ux_analysis_id]
+  end
 end
