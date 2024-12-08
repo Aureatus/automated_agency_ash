@@ -16,7 +16,7 @@ defmodule AutomatedAgency.Websites.Page do
       # argument :domain_id, :uuid, allow_nil?: false
       # argument :url, :string, allow_nil?: false
 
-      change AutomatedAgency.Websites.Page.FetchWebPage
+      change AutomatedAgency.Websites.Page.Fetch
     end
   end
 
