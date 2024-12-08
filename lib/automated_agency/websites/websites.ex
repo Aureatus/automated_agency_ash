@@ -22,6 +22,7 @@ defmodule AutomatedAgency.Websites do
 
     resource AutomatedAgency.Websites.UxAnalysis do
       define :create_ux_analysis, action: :create, args: [:page_id]
+      define :create_ux_analysis_from_page, action: :create_from_page, args: [:page_id]
     end
 
     resource AutomatedAgency.Websites.UxCriticism do

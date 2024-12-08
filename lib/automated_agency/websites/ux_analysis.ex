@@ -10,6 +10,12 @@ defmodule AutomatedAgency.Websites.UxAnalysis do
     defaults [:read]
 
     create :create, accept: [:page_id]
+
+    create :create_from_page do
+      accept [:page_id]
+
+      change AutomatedAgency.Websites.UxAnalysis.FetchAnalysis
+    end
   end
 
   attributes do
