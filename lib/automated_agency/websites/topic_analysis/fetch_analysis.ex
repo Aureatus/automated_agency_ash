@@ -9,25 +9,16 @@ defmodule AutomatedAgency.Websites.TopicAnalysis.FetchAnalysis do
 
       topic_analysis = get_topic_analysis_info(page.url, page.html)
 
-      with_primary_category =
-        changeset
-        |> Ash.Changeset.force_change_attribute(
-          :primary_category,
-          topic_analysis.primary_category
-        )
-
-      IO.inspect(with_primary_category)
-
-      Enum.reduce(topic_analysis.keywords, with_primary_category, fn keyword, acc ->
-        Ash.Changeset.manage_relationship(
-          acc,
-          :keywords,
-          %{
-            keyword: keyword
-          },
-          type: :create
-        )
-      end)
+      changeset
+      |> Ash.Changeset.force_change_attribute(
+        :primary_category,
+        topic_analysis.primary_category
+      )
+      |> Ash.Changeset.manage_relationship(
+        :keywords,
+        Enum.map(topic_analysis.keywords, &%{keyword: &1}),
+        type: :create
+      )
     end)
   end
 

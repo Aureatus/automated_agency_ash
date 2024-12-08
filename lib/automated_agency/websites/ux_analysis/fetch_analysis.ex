@@ -16,18 +16,19 @@ defmodule AutomatedAgency.Websites.UxAnalysis.FetchAnalysis do
           page.topic_analysis
         )
 
-      Enum.reduce(ux_analysis.points, changeset, fn point, acc ->
-        Ash.Changeset.manage_relationship(
-          acc,
-          :ux_criticisms,
-          %{
-            severity: point.severity,
-            criticism: point.criticism,
-            explanation: point.explanation
-          },
-          type: :create
-        )
-      end)
+      changeset
+      |> Ash.Changeset.manage_relationship(
+        :ux_criticisms,
+        Enum.map(
+          ux_analysis.points,
+          &%{
+            severity: &1.severity,
+            criticism: &1.criticism,
+            explanation: &1.explanation
+          }
+        ),
+        type: :create
+      )
     end)
   end
 
