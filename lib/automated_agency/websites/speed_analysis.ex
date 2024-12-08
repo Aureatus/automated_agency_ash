@@ -10,6 +10,12 @@ defmodule AutomatedAgency.Websites.SpeedAnalysis do
     defaults [:read]
 
     create :create, accept: [:page_id, :desktop_data, :mobile_data]
+
+    create :create_from_page do
+      accept [:page_id]
+
+      change AutomatedAgency.Websites.SpeedAnalysis.FetchAnalysis
+    end
   end
 
   attributes do

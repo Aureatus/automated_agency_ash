@@ -35,6 +35,8 @@ defmodule AutomatedAgency.Websites do
       define :create_speed_analysis,
         action: :create,
         args: [:page_id, :desktop_data, :mobile_data]
+
+      define :create_speed_analysis_from_page, action: :create_from_page, args: [:page_id]
     end
 
     resource AutomatedAgency.Websites.ImprovedPage do
