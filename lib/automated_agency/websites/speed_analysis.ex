@@ -28,4 +28,8 @@ defmodule AutomatedAgency.Websites.SpeedAnalysis do
   relationships do
     belongs_to :page, AutomatedAgency.Websites.Page, allow_nil?: false
   end
+
+  identities do
+    identity :unique_on_page, [:page_id]
+  end
 end
