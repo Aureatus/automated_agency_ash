@@ -45,7 +45,7 @@ defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
 
     base64_mobile_screenshot = Helpers.prep_image_for_instructor(mobile_screenshot)
 
-    keyword_list = Helpers.parse_keyword_list(topic_analysis)
+    keyword_list = Helpers.format_keywords_for_prompt(topic_analysis)
     criticism_list = parse_criticism_list(criticisms)
 
     case Instructor.chat_completion(
