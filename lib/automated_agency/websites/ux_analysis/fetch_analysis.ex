@@ -11,7 +11,7 @@ defmodule AutomatedAgency.Websites.UxAnalysis.FetchAnalysis do
         |> Ash.load!([:screenshot, topic_analysis: [:keywords]])
 
       ux_analysis =
-        get_insights(
+        generate_ux_insights(
           {page.screenshot.desktop_data, page.screenshot.mobile_data},
           page.topic_analysis
         )
@@ -41,7 +41,7 @@ defmodule AutomatedAgency.Websites.UxAnalysis.FetchAnalysis do
     end
   end
 
-  def get_insights(
+  def generate_ux_insights(
         {desktop_screenshot, mobile_screenshot},
         topic_analysis
       ) do
