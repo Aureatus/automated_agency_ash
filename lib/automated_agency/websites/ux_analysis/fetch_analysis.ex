@@ -1,6 +1,7 @@
 defmodule AutomatedAgency.Websites.UxAnalysis.FetchAnalysis do
   use Ash.Resource.Change
   use Ecto.Schema
+  alias AutomatedAgency.Helpers
 
   def change(changeset, _, _) do
     Ash.Changeset.before_transaction(changeset, fn changeset ->
@@ -45,10 +46,11 @@ defmodule AutomatedAgency.Websites.UxAnalysis.FetchAnalysis do
         {desktop_screenshot, mobile_screenshot},
         topic_analysis
       ) do
-    base64_desktop_screenshot = "data:image/png;base64," <> Base.encode64(desktop_screenshot)
-    base64_mobile_screenshot = "data:image/png;base64," <> Base.encode64(mobile_screenshot)
+    base64_desktop_screenshot = Helpers.prep_image_for_instructor(desktop_screenshot)
 
-    keyword_list = parse_keyword_list(topic_analysis)
+    base64_mobile_screenshot = Helpers.prep_image_for_instructor(mobile_screenshot)
+
+    keyword_list = Helpers.parse_keyword_list(topic_analysis)
 
     case Instructor.chat_completion(
            model: "gpt-4o-mini",
@@ -77,9 +79,5 @@ defmodule AutomatedAgency.Websites.UxAnalysis.FetchAnalysis do
       {:ok, result} -> result
       {:error, error} -> error
     end
-  end
-
-  defp parse_keyword_list(topic_analysis) do
-    Enum.map(topic_analysis.keywords, & &1.keyword) |> Enum.join(", ")
   end
 end
