@@ -84,6 +84,7 @@ defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
   defp parse_criticism_list(ux_criticisms) do
     Enum.with_index(ux_criticisms)
     |> Enum.map(&construct_criticism_line/1)
+    |> Enum.join("\n")
   end
 
   defp construct_criticism_line({
