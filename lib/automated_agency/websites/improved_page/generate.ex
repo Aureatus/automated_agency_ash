@@ -48,6 +48,14 @@ defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
     keyword_list = Helpers.format_keywords_for_prompt(topic_analysis)
     criticism_list = parse_criticism_list(criticisms)
 
+    prompt =
+      AutomatedAgency.Websites.Prompts.build_improved_page_prompt(
+        topic_analysis.primary_category,
+        keyword_list,
+        criticism_list,
+        html
+      )
+
     case Instructor.chat_completion(
            model: "gpt-4o-mini",
            response_model: __MODULE__,
@@ -57,17 +65,7 @@ defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
                content: [
                  %{
                    type: "text",
-                   text:
-                     "I am going to provide two images,  one in desktop format, one in mobile format. I will also provide html of a site, alongside the main category, applicable keywords and some criticisms.
-                      I would like you to create a new and improved site using html, and the improvements made.
-
-                      The main category of this site is: #{topic_analysis.primary_category}, and
-                      some keywords that are applicable for the site are: #{keyword_list}.
-
-                      The criticisms are as follows:
-                      #{criticism_list}
-
-                      HTML: #{html}"
+                   text: prompt
                  },
                  %{type: "image_url", image_url: %{url: base64_desktop_screenshot}},
                  %{type: "image_url", image_url: %{url: base64_mobile_screenshot}}

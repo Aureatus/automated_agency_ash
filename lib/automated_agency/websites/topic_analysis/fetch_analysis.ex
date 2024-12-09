@@ -32,6 +32,9 @@ defmodule AutomatedAgency.Websites.TopicAnalysis.FetchAnalysis do
   def generate_topic_analysis(url, html) do
     page_info = extract_key_text_from_html(html)
 
+    prompt =
+      AutomatedAgency.Websites.Prompts.build_topic_analysis_prompt(url, page_info)
+
     {:ok, page_info} =
       Instructor.chat_completion(
         model: "gpt-4o-mini",
@@ -39,11 +42,7 @@ defmodule AutomatedAgency.Websites.TopicAnalysis.FetchAnalysis do
         messages: [
           %{
             role: "user",
-            content:
-              "Extract a primary category for the following site using the url plus provided text, and a list of keywords that would be applicable.
-                url: #{url}
-                text: #{page_info}
-                "
+            content: prompt
           }
         ]
       )

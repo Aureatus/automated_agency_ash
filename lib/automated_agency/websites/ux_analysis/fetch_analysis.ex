@@ -52,6 +52,12 @@ defmodule AutomatedAgency.Websites.UxAnalysis.FetchAnalysis do
 
     keyword_list = Helpers.format_keywords_for_prompt(topic_analysis)
 
+    prompt =
+      AutomatedAgency.Websites.Prompts.build_ux_analysis_prompt(
+        topic_analysis.primary_category,
+        keyword_list
+      )
+
     case Instructor.chat_completion(
            model: "gpt-4o-mini",
            response_model: __MODULE__,
@@ -61,13 +67,7 @@ defmodule AutomatedAgency.Websites.UxAnalysis.FetchAnalysis do
                content: [
                  %{
                    type: "text",
-                   text:
-                     "Can you provide some criticisms on the UI/UX design of this site, in the format of concise criticism + explanation + severity (of low, medium or high), and in order of importance?
-
-                     The main category of this site is: #{topic_analysis.primary_category}.
-                     Some keywords that are applicable for the site are: #{keyword_list}
-
-                     There are two images provided, the larger one is a desktop format, the smaller is a mobile format."
+                   text: prompt
                  },
                  %{type: "image_url", image_url: %{url: base64_desktop_screenshot}},
                  %{type: "image_url", image_url: %{url: base64_mobile_screenshot}}
