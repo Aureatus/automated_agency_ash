@@ -2,7 +2,6 @@ defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
   use Ash.Resource.Change
   use Ecto.Schema
   alias AutomatedAgency.Websites.Prompts
-  alias AutomatedAgency.Helpers
 
   def change(changeset, _, _) do
     Ash.Changeset.before_transaction(changeset, fn changeset ->
@@ -39,7 +38,7 @@ defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
     desktop_image_prompt = Prompts.format_image_for_api(desktop_screenshot)
     mobile_image_prompt = Prompts.format_image_for_api(mobile_screenshot)
 
-    keyword_list = Helpers.format_keywords_for_prompt(topic_analysis)
+    keyword_list = Prompts.format_keywords_for_prompt(topic_analysis)
     criticism_list = parse_criticism_list(criticisms)
 
     prompt =
