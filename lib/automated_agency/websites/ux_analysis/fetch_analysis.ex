@@ -45,7 +45,7 @@ defmodule AutomatedAgency.Websites.UxAnalysis.FetchAnalysis do
     keyword_list = Helpers.format_keywords_for_prompt(topic_analysis)
 
     prompt =
-      AutomatedAgency.Websites.Prompts.build_ux_analysis_prompt(
+      Prompts.build_ux_analysis_prompt(
         topic_analysis.primary_category,
         keyword_list
       )

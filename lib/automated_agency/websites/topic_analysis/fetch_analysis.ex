@@ -28,7 +28,7 @@ defmodule AutomatedAgency.Websites.TopicAnalysis.FetchAnalysis do
     page_info = extract_key_text_from_html(html)
 
     prompt =
-      AutomatedAgency.Websites.Prompts.build_topic_analysis_prompt(url, page_info)
+      Prompts.build_topic_analysis_prompt(url, page_info)
 
     {:ok, page_info} =
       Instructor.chat_completion(

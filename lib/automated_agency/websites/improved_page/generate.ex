@@ -44,7 +44,7 @@ defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
     criticism_list = parse_criticism_list(criticisms)
 
     prompt =
-      AutomatedAgency.Websites.Prompts.build_improved_page_prompt(
+      Prompts.build_improved_page_prompt(
         topic_analysis.primary_category,
         keyword_list,
         criticism_list,
