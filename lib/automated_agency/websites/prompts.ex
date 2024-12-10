@@ -83,4 +83,9 @@ defmodule AutomatedAgency.Websites.Prompts do
     |> String.replace("{{criticisms}}", criticisms)
     |> String.replace("{{html}}", html)
   end
+
+  def format_image_for_api(image) do
+    data_url = "data:image/png;base64," <> Base.encode64(image)
+    %{type: "image_url", image_url: %{url: data_url}}
+  end
 end

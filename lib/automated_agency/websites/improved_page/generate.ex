@@ -36,9 +36,8 @@ defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
         desktop_screenshot,
         mobile_screenshot
       ) do
-    base64_desktop_screenshot = Helpers.prep_image_for_instructor(desktop_screenshot)
-
-    base64_mobile_screenshot = Helpers.prep_image_for_instructor(mobile_screenshot)
+    desktop_image_prompt = Prompts.format_image_for_api(desktop_screenshot)
+    mobile_image_prompt = Prompts.format_image_for_api(mobile_screenshot)
 
     keyword_list = Helpers.format_keywords_for_prompt(topic_analysis)
     criticism_list = parse_criticism_list(criticisms)
@@ -62,8 +61,8 @@ defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
                    type: "text",
                    text: prompt
                  },
-                 %{type: "image_url", image_url: %{url: base64_desktop_screenshot}},
-                 %{type: "image_url", image_url: %{url: base64_mobile_screenshot}}
+                 desktop_image_prompt,
+                 mobile_image_prompt
                ]
              }
            ],
