@@ -31,6 +31,39 @@ defmodule AutomatedAgency.Websites.Prompts do
   The HTML is: {{html}}
   """
 
+  defmodule TopicAnalysisResponseSchema do
+    use Ecto.Schema
+
+    @primary_key false
+    embedded_schema do
+      field(:primary_category, :string)
+      field(:keywords, {:array, :string})
+    end
+  end
+
+  defmodule UxAnalysisResponseSchema do
+    use Ecto.Schema
+
+    @primary_key false
+    embedded_schema do
+      embeds_many :points, Point, primary_key: false do
+        field(:severity, Ecto.Enum, values: [:low, :medium, :high])
+        field(:criticism, :string)
+        field(:explanation, :string)
+      end
+    end
+  end
+
+  defmodule ImprovedPageResponseSchema do
+    use Ecto.Schema
+
+    @primary_key false
+    embedded_schema do
+      field(:improved_html, :string)
+      field(:improvements_made, {:array, :string})
+    end
+  end
+
   def build_topic_analysis_prompt(url, page_info) do
     @topic_analysis
     |> String.replace("{{url}}", url)

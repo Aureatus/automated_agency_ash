@@ -1,6 +1,7 @@
 defmodule AutomatedAgency.Websites.UxAnalysis.FetchAnalysis do
   use Ash.Resource.Change
   use Ecto.Schema
+  alias AutomatedAgency.Websites.Prompts
   alias AutomatedAgency.Helpers
 
   def change(changeset, _, _) do
@@ -33,15 +34,6 @@ defmodule AutomatedAgency.Websites.UxAnalysis.FetchAnalysis do
     end)
   end
 
-  @primary_key false
-  embedded_schema do
-    embeds_many :points, Point, primary_key: false do
-      field(:severity, Ecto.Enum, values: [:low, :medium, :high])
-      field(:criticism, :string)
-      field(:explanation, :string)
-    end
-  end
-
   def generate_ux_insights(
         {desktop_screenshot, mobile_screenshot},
         topic_analysis
@@ -60,7 +52,7 @@ defmodule AutomatedAgency.Websites.UxAnalysis.FetchAnalysis do
 
     case Instructor.chat_completion(
            model: "gpt-4o-mini",
-           response_model: __MODULE__,
+           response_model: Prompts.UxAnalysisResponseSchema,
            messages: [
              %{
                role: "user",

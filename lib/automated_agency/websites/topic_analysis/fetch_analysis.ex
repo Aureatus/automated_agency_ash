@@ -1,4 +1,5 @@
 defmodule AutomatedAgency.Websites.TopicAnalysis.FetchAnalysis do
+  alias AutomatedAgency.Websites.Prompts
   use Ash.Resource.Change
   use Ecto.Schema
 
@@ -23,12 +24,6 @@ defmodule AutomatedAgency.Websites.TopicAnalysis.FetchAnalysis do
     end)
   end
 
-  @primary_key false
-  embedded_schema do
-    field(:primary_category, :string)
-    field(:keywords, {:array, :string})
-  end
-
   def generate_topic_analysis(url, html) do
     page_info = extract_key_text_from_html(html)
 
@@ -38,7 +33,7 @@ defmodule AutomatedAgency.Websites.TopicAnalysis.FetchAnalysis do
     {:ok, page_info} =
       Instructor.chat_completion(
         model: "gpt-4o-mini",
-        response_model: __MODULE__,
+        response_model: Prompts.TopicAnalysisResponseSchema,
         messages: [
           %{
             role: "user",

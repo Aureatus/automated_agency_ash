@@ -1,6 +1,7 @@
 defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
   use Ash.Resource.Change
   use Ecto.Schema
+  alias AutomatedAgency.Websites.Prompts
   alias AutomatedAgency.Helpers
 
   def change(changeset, _, _) do
@@ -28,12 +29,6 @@ defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
     end)
   end
 
-  @primary_key false
-  embedded_schema do
-    field(:improved_html, :string)
-    field(:improvements_made, {:array, :string})
-  end
-
   def generate_html(
         html,
         topic_analysis,
@@ -58,7 +53,7 @@ defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
 
     case Instructor.chat_completion(
            model: "gpt-4o-mini",
-           response_model: __MODULE__,
+           response_model: Prompts.ImprovedPageResponseSchema,
            messages: [
              %{
                role: "user",
