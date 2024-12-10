@@ -39,7 +39,7 @@ defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
     mobile_image_prompt = Prompts.format_image_for_api(mobile_screenshot)
 
     keyword_list = Prompts.format_keywords_for_prompt(topic_analysis)
-    criticism_list = parse_criticism_list(criticisms)
+    criticism_list = Prompts.format_criticism_list_for_prompt(criticisms)
 
     prompt =
       Prompts.build_improved_page_prompt(
@@ -70,18 +70,5 @@ defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
       {:ok, result} -> result
       {:error, error} -> error
     end
-  end
-
-  defp parse_criticism_list(ux_criticisms) do
-    Enum.with_index(ux_criticisms)
-    |> Enum.map(&construct_criticism_line/1)
-    |> Enum.join("\n")
-  end
-
-  defp construct_criticism_line({
-         criticism,
-         index
-       }) do
-    "#{index + 1}. Severity: #{criticism.severity}, Summary: #{criticism.criticism}, More detailed explanation: #{criticism.explanation}"
   end
 end

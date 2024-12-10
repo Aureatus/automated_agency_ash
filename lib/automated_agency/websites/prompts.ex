@@ -92,4 +92,19 @@ defmodule AutomatedAgency.Websites.Prompts do
   def format_keywords_for_prompt(topic_analysis) do
     Enum.map(topic_analysis.keywords, & &1.keyword) |> Enum.join(", ")
   end
+
+  def format_criticism_list_for_prompt(ux_criticisms) do
+    Enum.with_index(ux_criticisms)
+    |> Enum.map(&construct_criticism_line/1)
+    |> Enum.join("\n")
+  end
+
+  defp construct_criticism_line({criticism, index}) do
+    """
+    Point #{index + 1}:
+    - Issue: #{criticism.criticism}
+    - Severity Level: #{criticism.severity}
+    - Detailed Analysis: #{criticism.explanation}
+    """
+  end
 end
