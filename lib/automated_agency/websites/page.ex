@@ -20,11 +20,19 @@ defmodule AutomatedAgency.Websites.Page do
     end
   end
 
+  validations do
+    validate present([:html], message: "HTML must be present when content is fetched"),
+      where: attribute_equals(:content_fetched?, true)
+  end
+
   attributes do
     uuid_primary_key :id
 
     attribute :url, :string, allow_nil?: false
-    attribute :html, :string, allow_nil?: false
+    attribute :html, :string, allow_nil?: true
+
+    attribute :base_page?, :boolean, allow_nil?: false, default: false
+    attribute :content_fetched?, :boolean, allow_nil?: false, default: false
   end
 
   relationships do
