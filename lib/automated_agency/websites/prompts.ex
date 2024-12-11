@@ -76,7 +76,7 @@ defmodule AutomatedAgency.Websites.Prompts do
     |> String.replace("{{keywords}}", keywords)
   end
 
-  def build_improved_page_prompt(primary_category, keywords, criticisms, html) do
+  def build_improved_page_prompt(html, primary_category, keywords, criticisms) do
     @improved_page
     |> String.replace("{{primary_category}}", primary_category)
     |> String.replace("{{keywords}}", keywords)

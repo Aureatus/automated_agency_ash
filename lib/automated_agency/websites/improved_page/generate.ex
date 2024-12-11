@@ -43,10 +43,10 @@ defmodule AutomatedAgency.Websites.ImprovedPage.Generate do
 
     prompt =
       Prompts.build_improved_page_prompt(
+        html,
         topic_analysis.primary_category,
         keyword_list,
-        criticism_list,
-        html
+        criticism_list
       )
 
     case Instructor.chat_completion(
