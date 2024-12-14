@@ -10,6 +10,12 @@ defmodule AutomatedAgency.Websites.Domain do
     defaults [:read]
 
     create :create, accept: [:domain]
+
+    create :create_with_placeholder_pages do
+      accept [:domain]
+
+      change AutomatedAgency.Websites.Domain.SetupDomain
+    end
   end
 
   attributes do

@@ -31,6 +31,22 @@ defmodule AutomatedAgency.Websites.Prompts do
   The HTML is: {{html}}
   """
 
+  @relevant_links """
+  I am going to provide you with a site URL and a list of links found on the site.
+
+  I need you to return only a set of semi unique seeming URLS.
+
+  For example, I don't want you to return any links that are seemingly just pagination or next pages, of an existing page.
+
+  And if there are two instances of data on what seems to be the same route, I would only want one of those.
+
+  You MUST return absolute links.
+
+  HTML : {{html}}
+
+  url list : {{urls}}
+  """
+
   defmodule TopicAnalysisResponseSchema do
     use Ecto.Schema
 
@@ -64,6 +80,15 @@ defmodule AutomatedAgency.Websites.Prompts do
     end
   end
 
+  defmodule RelevantLinksResponseSchema do
+    use Ecto.Schema
+
+    @primary_key false
+    embedded_schema do
+      field(:urls, {:array, :string})
+    end
+  end
+
   def build_topic_analysis_prompt(url, page_info) do
     @topic_analysis
     |> String.replace("{{url}}", url)
@@ -82,6 +107,12 @@ defmodule AutomatedAgency.Websites.Prompts do
     |> String.replace("{{keywords}}", keywords)
     |> String.replace("{{criticisms}}", criticisms)
     |> String.replace("{{html}}", html)
+  end
+
+  def build_relevant_links_prompt(urls, html) do
+    @relevant_links
+    |> String.replace("{{html}}", html)
+    |> String.replace("{{urls}}", urls)
   end
 
   def format_image_for_api(image) do
@@ -106,5 +137,9 @@ defmodule AutomatedAgency.Websites.Prompts do
     - Severity Level: #{criticism.severity}
     - Detailed Analysis: #{criticism.explanation}
     """
+  end
+
+  def format_url_list_for_prompt(urls) do
+    Enum.join(urls, ", ")
   end
 end

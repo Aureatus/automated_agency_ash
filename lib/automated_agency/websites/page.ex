@@ -9,7 +9,9 @@ defmodule AutomatedAgency.Websites.Page do
   actions do
     defaults [:read]
 
-    create :create, accept: [:domain_id, :url, :html]
+    create :create,
+      accept: [:domain_id, :url, :html, :base_page?, :content_fetched?],
+      primary?: true
 
     create :create_from_url do
       accept [:domain_id, :url]

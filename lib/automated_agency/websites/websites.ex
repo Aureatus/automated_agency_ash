@@ -4,6 +4,7 @@ defmodule AutomatedAgency.Websites do
   resources do
     resource AutomatedAgency.Websites.Domain do
       define :create_domain, action: :create, args: [:domain]
+      define :setup_domain, action: :create_with_placeholder_pages, args: [:domain]
     end
 
     resource AutomatedAgency.Websites.Page do
