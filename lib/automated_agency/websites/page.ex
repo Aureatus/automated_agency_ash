@@ -20,10 +20,12 @@ defmodule AutomatedAgency.Websites.Page do
 
       change AutomatedAgency.Websites.Page.Fetch
     end
+
+    update :update, accept: [:html, :content_fetched?], primary?: true
   end
 
   validations do
-    validate present([:html], message: "HTML must be present when content is fetched"),
+    validate present([:html]),
       where: attribute_equals(:content_fetched?, true)
   end
 

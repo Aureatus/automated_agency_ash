@@ -16,6 +16,11 @@ defmodule AutomatedAgency.Websites.Domain do
 
       change AutomatedAgency.Websites.Domain.SetupDomain
     end
+
+    update :fetch_pages_content do
+      change AutomatedAgency.Websites.Domain.PopulatePages
+      require_atomic? false
+    end
   end
 
   attributes do
