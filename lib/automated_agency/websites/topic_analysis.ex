@@ -11,10 +11,29 @@ defmodule AutomatedAgency.Websites.TopicAnalysis do
 
     create :create, accept: [:page_id, :primary_category]
 
-    create :create_from_page do
-      accept [:page_id]
+    create :create_with_keywords do
+      accept [:page_id, :primary_category]
 
-      change AutomatedAgency.Websites.TopicAnalysis.FetchAnalysis
+      argument :keywords, {:array, :map},
+        allow_nil?: false,
+        constraints: [
+          items: [
+            fields: [
+              keyword: [type: :string, allow_nil?: false]
+            ]
+          ]
+        ]
+
+      change manage_relationship(:keywords, type: :create)
+    end
+
+    action :create_from_domain do
+      argument :domain_id, :uuid, allow_nil?: false
+
+      returns :struct
+      constraints instance_of: __MODULE__
+
+      run AutomatedAgency.Websites.TopicAnalysis.RunAnalysis
     end
   end
 

@@ -15,7 +15,7 @@ defmodule AutomatedAgency.Websites do
 
     resource AutomatedAgency.Websites.TopicAnalysis do
       define :create_topic_analysis, action: :create, args: [:page_id, :primary_category]
-      define :create_topic_analysis_from_page, action: :create_from_page, args: [:page_id]
+      define :create_topic_analysis_from_domain, action: :create_from_domain, args: [:domain_id]
     end
 
     resource AutomatedAgency.Websites.Keyword do
