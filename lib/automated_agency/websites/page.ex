@@ -22,6 +22,23 @@ defmodule AutomatedAgency.Websites.Page do
     end
 
     update :update, accept: [:html, :content_fetched?], primary?: true
+
+    update :populate_page do
+      accept [:html, :content_fetched?]
+
+      argument :screenshot, :map,
+        allow_nil?: false,
+        constraints: [
+          fields: [
+            desktop_data: [type: :binary, allow_nil?: false],
+            mobile_data: [type: :binary, allow_nil?: false]
+          ]
+        ]
+
+      change manage_relationship(:screenshot, type: :create)
+
+      require_atomic? false
+    end
   end
 
   validations do

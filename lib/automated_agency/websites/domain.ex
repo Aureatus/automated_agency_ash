@@ -21,6 +21,17 @@ defmodule AutomatedAgency.Websites.Domain do
       change AutomatedAgency.Websites.Domain.PopulatePages
       require_atomic? false
     end
+
+    action :fetch_pages_content_for_domain do
+      argument :domain_id, :uuid, allow_nil?: false
+
+      returns :struct
+      constraints instance_of: __MODULE__
+
+      run AutomatedAgency.Websites.Domain.FetchDomainContent
+
+      transaction? true
+    end
   end
 
   attributes do
