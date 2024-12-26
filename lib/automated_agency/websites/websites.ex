@@ -24,7 +24,7 @@ defmodule AutomatedAgency.Websites do
 
     resource AutomatedAgency.Websites.UxAnalysis do
       define :create_ux_analysis, action: :create, args: [:page_id]
-      define :create_ux_analysis_from_page, action: :create_from_page, args: [:page_id]
+      define :create_ux_analysis_from_domain, action: :create_from_domain, args: [:domain_id]
     end
 
     resource AutomatedAgency.Websites.UxCriticism do
@@ -43,7 +43,7 @@ defmodule AutomatedAgency.Websites do
 
     resource AutomatedAgency.Websites.ImprovedPage do
       define :create_improved_page, action: :create, args: [:page_id, :html]
-      define :create_improved_page_for_existing_page, action: :create_for_page, args: [:page_id]
+      define :create_improved_page_from_domain, action: :create_from_domain, args: [:domain_id]
     end
 
     resource AutomatedAgency.Websites.Screenshot do

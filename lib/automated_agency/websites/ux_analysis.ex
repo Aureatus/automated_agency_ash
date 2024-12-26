@@ -11,10 +11,35 @@ defmodule AutomatedAgency.Websites.UxAnalysis do
 
     create :create, accept: [:page_id]
 
-    create :create_from_page do
+    create :create_with_criticisms do
       accept [:page_id]
 
-      change AutomatedAgency.Websites.UxAnalysis.FetchAnalysis
+      argument :ux_criticisms, {:array, :map},
+        allow_nil?: false,
+        constraints: [
+          items: [
+            fields: [
+              severity: [
+                type: :atom,
+                constraints: [one_of: [:low, :medium, :high]],
+                allow_nil?: false
+              ],
+              criticism: [type: :string, allow_nil?: false],
+              explanation: [type: :string, allow_nil?: false]
+            ]
+          ]
+        ]
+
+      change manage_relationship(:ux_criticisms, type: :create)
+    end
+
+    action :create_from_domain do
+      argument :domain_id, :uuid, allow_nil?: false
+
+      returns :struct
+      constraints instance_of: __MODULE__
+
+      run AutomatedAgency.Websites.UxAnalysis.RunAnalysis
     end
   end
 

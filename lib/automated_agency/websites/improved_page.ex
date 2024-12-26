@@ -11,10 +11,13 @@ defmodule AutomatedAgency.Websites.ImprovedPage do
 
     create :create, accept: [:page_id, :html]
 
-    create :create_for_page do
-      accept [:page_id]
+    action :create_from_domain do
+      argument :domain_id, :uuid, allow_nil?: false
 
-      change AutomatedAgency.Websites.ImprovedPage.Generate
+      returns :struct
+      constraints instance_of: __MODULE__
+
+      run AutomatedAgency.Websites.ImprovedPage.GenerateForDomain
     end
   end
 

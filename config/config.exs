@@ -116,7 +116,8 @@ config :wallaby,
 
 config :instructor,
   adapter: Instructor.Adapters.OpenAI,
-  openai: [api_key: System.get_env("OPENAI_API_KEY")]
+  openai: [api_key: System.get_env("OPENAI_API_KEY")],
+  http_options: [receive_timeout: 100_000]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
