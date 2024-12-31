@@ -1,5 +1,19 @@
 defmodule AutomatedAgency.Websites.Domain do
-  use Ash.Resource, domain: AutomatedAgency.Websites, data_layer: AshPostgres.DataLayer
+  use Ash.Resource,
+    domain: AutomatedAgency.Websites,
+    data_layer: AshPostgres.DataLayer,
+    extensions: [
+      AshGraphql.Resource
+    ]
+
+  graphql do
+    type :domain
+    relationships [:pages]
+
+    queries do
+      read_one :fetch_domain, :read_by_domain
+    end
+  end
 
   postgres do
     table "domains"
@@ -8,6 +22,10 @@ defmodule AutomatedAgency.Websites.Domain do
 
   actions do
     defaults [:read]
+
+    read :read_by_domain do
+      get_by :domain
+    end
 
     create :create, accept: [:domain]
 
@@ -37,10 +55,10 @@ defmodule AutomatedAgency.Websites.Domain do
   attributes do
     uuid_primary_key :id
 
-    attribute :domain, :string, allow_nil?: false
+    attribute :domain, :string, allow_nil?: false, public?: true
   end
 
   relationships do
-    has_many :pages, AutomatedAgency.Websites.Page
+    has_many :pages, AutomatedAgency.Websites.Page, public?: true
   end
 end

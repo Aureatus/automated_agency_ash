@@ -1,5 +1,15 @@
 defmodule AutomatedAgency.Websites.TopicAnalysis do
-  use Ash.Resource, domain: AutomatedAgency.Websites, data_layer: AshPostgres.DataLayer
+  use Ash.Resource,
+    domain: AutomatedAgency.Websites,
+    data_layer: AshPostgres.DataLayer,
+    extensions: [
+      AshGraphql.Resource
+    ]
+
+  graphql do
+    type :topic_analysis
+    relationships [:keywords]
+  end
 
   postgres do
     table "topic_analyses"
@@ -40,13 +50,13 @@ defmodule AutomatedAgency.Websites.TopicAnalysis do
   attributes do
     uuid_primary_key :id
 
-    attribute :primary_category, :string, allow_nil?: false
+    attribute :primary_category, :string, allow_nil?: false, public?: true
   end
 
   relationships do
-    has_many :keywords, AutomatedAgency.Websites.Keyword
+    has_many :keywords, AutomatedAgency.Websites.Keyword, public?: true
 
-    belongs_to :page, AutomatedAgency.Websites.Page, allow_nil?: false
+    belongs_to :page, AutomatedAgency.Websites.Page, allow_nil?: false, public?: true
   end
 
   identities do

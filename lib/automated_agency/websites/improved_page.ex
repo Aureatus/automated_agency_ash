@@ -1,5 +1,14 @@
 defmodule AutomatedAgency.Websites.ImprovedPage do
-  use Ash.Resource, domain: AutomatedAgency.Websites, data_layer: AshPostgres.DataLayer
+  use Ash.Resource,
+    domain: AutomatedAgency.Websites,
+    data_layer: AshPostgres.DataLayer,
+    extensions: [
+      AshGraphql.Resource
+    ]
+
+  graphql do
+    type :improved_page
+  end
 
   postgres do
     table "improved_pages"
@@ -24,11 +33,11 @@ defmodule AutomatedAgency.Websites.ImprovedPage do
   attributes do
     uuid_primary_key :id
 
-    attribute :html, :string, allow_nil?: false
+    attribute :html, :string, allow_nil?: false, public?: true
   end
 
   relationships do
-    belongs_to :page, AutomatedAgency.Websites.Page, allow_nil?: false
+    belongs_to :page, AutomatedAgency.Websites.Page, allow_nil?: false, public?: true
   end
 
   identities do

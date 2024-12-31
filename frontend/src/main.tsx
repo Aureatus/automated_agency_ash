@@ -3,6 +3,8 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 
 //theme provider
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
+import { ApolloProvider } from "@apollo/client";
+import { client } from "./lib/apollo";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
@@ -28,7 +30,9 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <RouterProvider router={router} />
+        <ApolloProvider client={client}>
+          <RouterProvider router={router} />
+        </ApolloProvider>
       </ThemeProvider>
     </StrictMode>
   );

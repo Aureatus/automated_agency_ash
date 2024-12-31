@@ -1,5 +1,15 @@
 defmodule AutomatedAgency.Websites.UxAnalysis do
-  use Ash.Resource, domain: AutomatedAgency.Websites, data_layer: AshPostgres.DataLayer
+  use Ash.Resource,
+    domain: AutomatedAgency.Websites,
+    data_layer: AshPostgres.DataLayer,
+    extensions: [
+      AshGraphql.Resource
+    ]
+
+  graphql do
+    type :ux_analysis
+    relationships [:ux_criticisms]
+  end
 
   postgres do
     table "ux_analyses"
@@ -48,9 +58,9 @@ defmodule AutomatedAgency.Websites.UxAnalysis do
   end
 
   relationships do
-    has_many :ux_criticisms, AutomatedAgency.Websites.UxCriticism
+    has_many :ux_criticisms, AutomatedAgency.Websites.UxCriticism, public?: true
 
-    belongs_to :page, AutomatedAgency.Websites.Page, allow_nil?: false
+    belongs_to :page, AutomatedAgency.Websites.Page, allow_nil?: false, public?: true
   end
 
   identities do

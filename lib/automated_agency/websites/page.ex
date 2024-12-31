@@ -1,5 +1,17 @@
 defmodule AutomatedAgency.Websites.Page do
-  use Ash.Resource, domain: AutomatedAgency.Websites, data_layer: AshPostgres.DataLayer
+  use Ash.Resource,
+    domain: AutomatedAgency.Websites,
+    data_layer: AshPostgres.DataLayer,
+    extensions: [
+      AshGraphql.Resource
+    ]
+
+  graphql do
+    type :page
+    relationships [:topic_analysis, :ux_analysis, :improved_page]
+
+    field_names base_page?: :is_base_page, content_fetched?: :is_content_fetched
+  end
 
   postgres do
     table "pages"
@@ -49,20 +61,30 @@ defmodule AutomatedAgency.Websites.Page do
   attributes do
     uuid_primary_key :id
 
-    attribute :url, :string, allow_nil?: false
-    attribute :html, :string, allow_nil?: true
+    attribute :url, :string, allow_nil?: false, public?: true
+    attribute :html, :string, allow_nil?: true, public?: true
 
-    attribute :base_page?, :boolean, allow_nil?: false, default: false
-    attribute :content_fetched?, :boolean, allow_nil?: false, default: false
+    attribute :base_page?, :boolean, allow_nil?: false, default: false, public?: true
+    attribute :content_fetched?, :boolean, allow_nil?: false, default: false, public?: true
   end
 
   relationships do
-    belongs_to :domain, AutomatedAgency.Websites.Domain, allow_nil?: false
+    belongs_to :domain, AutomatedAgency.Websites.Domain, allow_nil?: false, public?: true
 
     has_one :speed_analysis, AutomatedAgency.Websites.SpeedAnalysis, allow_nil?: false
-    has_one :topic_analysis, AutomatedAgency.Websites.TopicAnalysis, allow_nil?: false
-    has_one :ux_analysis, AutomatedAgency.Websites.UxAnalysis, allow_nil?: false
-    has_one :improved_page, AutomatedAgency.Websites.ImprovedPage, allow_nil?: false
+
+    has_one :topic_analysis, AutomatedAgency.Websites.TopicAnalysis,
+      allow_nil?: false,
+      public?: true
+
+    has_one :ux_analysis, AutomatedAgency.Websites.UxAnalysis,
+      allow_nil?: false,
+      public?: true
+
+    has_one :improved_page, AutomatedAgency.Websites.ImprovedPage,
+      allow_nil?: false,
+      public?: true
+
     has_one :screenshot, AutomatedAgency.Websites.Screenshot, allow_nil?: false
   end
 

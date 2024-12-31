@@ -16,10 +16,7 @@ function SearchComponent() {
     e.preventDefault();
 
     try {
-      // Extract domain from URL
-      const domain = new URL(url).hostname;
-      // Navigate to the analysis route with the domain as a parameter
-      navigate({ to: "/analysis/" + domain });
+      navigate({ to: "/analysis/" + encodeURIComponent(url) });
     } catch (error) {
       // Handle invalid URL error
       console.error("Invalid URL:", error);
