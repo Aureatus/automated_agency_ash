@@ -11,6 +11,10 @@ defmodule AutomatedAgency.Websites.Page do
     relationships [:topic_analysis, :ux_analysis, :improved_page]
 
     field_names base_page?: :is_base_page, content_fetched?: :is_content_fetched
+
+    queries do
+      get :fetch_page, :read
+    end
   end
 
   postgres do
