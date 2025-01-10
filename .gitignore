@@ -43,3 +43,12 @@ npm-debug.log
 
 */node_modules
 */.vite
+
+# MKCERT files
+localhost.pem
+localhost-key.pem
+
+# Local dev setup
+.setup-complete
+tmux-client*.log
+tmux-server*.log
