@@ -1,18 +1,19 @@
-# AutomatedAgency
+# Development Setup
 
-To start your Phoenix server:
+Prerequisites:
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+- Elixir 1.14+
+- Node.js 18+
+- Docker and Docker Compose
+- mkcert (for local SSL certificates)
+- Make
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Quick Start:
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+```bash
+# Complete setup
+make setup
 
-## Learn more
-
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+# Start development environment
+make dev
+```
