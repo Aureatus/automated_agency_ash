@@ -24,6 +24,7 @@ defmodule Mix.Tasks.FetchChromeDeps do
       ])
 
       System.cmd("unzip", [
+        "-o",
         "-d",
         "priv/chrome/",
         item.dir
