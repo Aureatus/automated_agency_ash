@@ -52,10 +52,9 @@ setup-env: ## Setup environment variables
 	@echo "Setting up environment variables..."
 	@if [ ! -f .env ]; then \
 		cp .env.template .env; \
-		secret_key=$$(mix phx.gen.secret); \
-		sed -i '' "s/REPLACE_WITH_GENERATED_SECRET/$$secret_key/" .env; \
-		echo ".env created with new secret key"; \
 	fi
+	@secret_key=$$(mix phx.gen.secret); \
+	sed -i.bak "s/^SECRET_KEY_BASE=.*$$/SECRET_KEY_BASE=$$secret_key/" .env && rm .env.bak
 	@if [ ! -f frontend/.env.local ]; then \
 		cp frontend/.env.local.template frontend/.env.local; \
 		echo "frontend/.env.local created"; \

@@ -23,7 +23,7 @@ config :automated_agency, AutomatedAgencyWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "SPqnwm8LvjVcR+rx0/QqV7ZjN7XdR7BaMN0iktzJPX0g/NPOH4UhauwVf+65NS7m",
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:automated_agency, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:automated_agency, ~w(--watch)]}
