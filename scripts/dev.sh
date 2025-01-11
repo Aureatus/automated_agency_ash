@@ -34,6 +34,6 @@ tmux new-session -s dev \; \
   select-pane -t 0 \; \
   send-keys 'docker compose up; tmux kill-session -t dev' Enter \; \
   select-pane -t 1 \; \
-  send-keys 'source .env && iex -S mix phx.server; tmux kill-session -t dev' Enter \; \
+  send-keys 'export $(cat .env | sed "/^#/d") && iex -S mix phx.server; tmux kill-session -t dev' Enter \; \
   select-pane -t 2 \; \
   send-keys 'cd frontend && npm run dev; tmux kill-session -t dev' Enter
