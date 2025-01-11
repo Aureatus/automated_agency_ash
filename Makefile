@@ -21,14 +21,6 @@ check-system-deps: ## Check for required system dependencies
 		echo "  Fedora: sudo dnf install tmux"; \
 		missing_deps=1; \
 	fi; \
-	if ! command -v mkcert >/dev/null 2>&1; then \
-		echo "- mkcert is not installed. Please install mkcert:"; \
-		echo "  Mac: brew install mkcert"; \
-		echo "  Ubuntu/Debian: sudo apt-get install mkcert"; \
-		echo "  Arch: sudo pacman -S mkcert"; \
-		echo "  Fedora: sudo dnf install mkcert"; \
-		missing_deps=1; \
-	fi; \
 	if ! command -v node >/dev/null 2>&1; then \
 		echo "- Node.js is not installed. Please install Node.js:"; \
 		echo "  Visit https://nodejs.org/"; \
@@ -45,7 +37,7 @@ check-system-deps: ## Check for required system dependencies
 		echo "\nPlease install the missing dependencies and try again."; \
 		exit 1; \
 	fi
-setup: check-system-deps setup-env setup-ssl setup-db setup-frontend setup-chrome ## Setup complete development environment
+setup: check-system-deps setup-env setup-db setup-frontend setup-chrome ## Setup complete development environment
 	@touch $(SETUP_COMPLETE_FILE)
 
 setup-env: ## Setup environment variables
@@ -59,15 +51,6 @@ setup-env: ## Setup environment variables
 		cp frontend/.env.local.template frontend/.env.local; \
 		echo "frontend/.env.local created"; \
 	fi
-
-# ... rest of the Makefile stays the same ...
-
-setup-ssl: ## Generate SSL certificates for local development
-	@echo "Setting up SSL certificates..."
-	@command -v mkcert >/dev/null 2>&1 || { echo "mkcert is required. Install it first."; exit 1; }
-	mkcert -install
-	mkcert localhost
-	@echo "SSL certificates generated"
 
 setup-db: ## Setup database and run migrations
 	@echo "Setting up database..."

@@ -9,8 +9,6 @@ cleanup() {
     pkill -f "iex -S mix"
     pkill -f "vite"
     pkill -f "npm run dev"
-    rm -f priv/cert/selfsigned.pem
-    rm -f priv/cert/selfsigned_key.pem
     tmux kill-session -t dev
 }
 
