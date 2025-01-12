@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, gql } from "@apollo/client";
 import {
   Card,
   CardContent,
@@ -11,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle, AlertCircle, CheckCircle } from "lucide-react";
 import { ReactElement } from "react";
+import { useGetPageInfoQuery } from "@/generated/graphql";
 
 type Keyword = {
   id: string;
@@ -23,35 +23,6 @@ type Criticism = {
   criticism: string;
   explanation: string;
 };
-
-const GET_PAGE_WITH_ALL_INFO = gql`
-  query ($id: ID!) {
-    fetchPage(id: $id) {
-      url
-      isBasePage
-      isContentFetched
-      html
-      topicAnalysis {
-        primaryCategory
-        keywords {
-          id
-          keyword
-        }
-      }
-      uxAnalysis {
-        uxCriticisms {
-          id
-          severity
-          criticism
-          explanation
-        }
-      }
-      improvedPage {
-        html
-      }
-    }
-  }
-`;
 
 const IssueSection = ({
   icon,
@@ -91,12 +62,13 @@ const IssueSection = ({
 function PageComponent() {
   const { pageId } = Route.useParams();
 
-  const { loading, error, data } = useQuery(GET_PAGE_WITH_ALL_INFO, {
+  const { loading, error, data } = useGetPageInfoQuery({
     variables: { id: pageId },
   });
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
+  if (!data) return <div>No data received</div>;
 
   const page = data.fetchPage;
 
@@ -106,7 +78,7 @@ function PageComponent() {
     "low",
   ].map((severity) =>
     page.uxAnalysis.uxCriticisms.filter(
-      (criticism: Criticism) => criticism.severity === severity
+      (criticism) => criticism.severity === severity
     )
   );
 
