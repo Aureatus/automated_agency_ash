@@ -13,7 +13,7 @@ defmodule AutomatedAgency.Websites.Page do
     field_names base_page?: :is_base_page, content_fetched?: :is_content_fetched
 
     queries do
-      get :fetch_page, :read
+      get :fetch_page, :read, allow_nil?: false
     end
   end
 
