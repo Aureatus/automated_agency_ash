@@ -1,52 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery, gql } from "@apollo/client";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-const GET_DOMAIN_WITH_ALL_INFO = gql`
-  query ($domain: String!) {
-    fetchDomain(domain: $domain) {
-      id
-      domain
-      pages {
-        id
-        url
-        isBasePage
-        isContentFetched
-        html
-        topicAnalysis {
-          primaryCategory
-          keywords {
-            keyword
-          }
-        }
-        uxAnalysis {
-          uxCriticisms {
-            severity
-            criticism
-            explanation
-          }
-        }
-        improvedPage {
-          html
-        }
-      }
-    }
-  }
-`;
+import { useGetDomainInfoQuery } from "@/generated/graphql";
 
 function AnalysisComponent() {
   const { domain } = Route.useParams();
 
-  const { loading, error, data } = useQuery(GET_DOMAIN_WITH_ALL_INFO, {
+  const { loading, error, data } = useGetDomainInfoQuery({
     variables: { domain: decodeURIComponent(domain) },
   });
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
+  if (!data) return <div>No data received</div>;
 
-  const { pages } = data.fetchDomain;
+  const pages = data.fetchDomain?.pages;
 
   return (
     <div>
