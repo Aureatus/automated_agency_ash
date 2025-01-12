@@ -63,9 +63,19 @@ setup-env: ## Setup environment variables
 
 setup-db: ## Setup database and run migrations
 	@echo "Setting up database..."
-	mix deps.get
-	mix ecto.create
-	mix ecto.migrate
+	@docker compose up -d postgres
+	@echo "Waiting for PostgreSQL to be ready..."
+	@until docker compose exec postgres pg_isready -h localhost -p 5432 -U postgres; do \
+		echo "PostgreSQL is unavailable - sleeping"; \
+		sleep 1; \
+	done
+
+	@bash -c 'export $$(cat .env | sed "/^#/d" | xargs) && \
+		mix deps.get && \
+		mix ecto.create && \
+		mix ecto.migrate'
+	@echo "Shutting down Docker containers..."
+	@docker compose down
 	@echo "Database setup complete"
 
 setup-frontend: ## Install frontend dependencies

@@ -5,7 +5,7 @@ echo "Starting development environment..."
 # Function for cleanup operations
 cleanup() {
     echo "Cleaning up..."
-    docker compose down -v
+    docker compose down
     pkill -f "iex -S mix"
     pkill -f "vite"
     pkill -f "npm run dev"
@@ -17,7 +17,7 @@ trap cleanup EXIT
 
 # Initial cleanup
 echo "Cleaning up previous instances..."
-docker compose down -v 2>/dev/null || true
+docker compose down 2>/dev/null || true
 pkill -f "iex -S mix" || true
 pkill -f "vite" || true
 pkill -f "npm run dev" || true

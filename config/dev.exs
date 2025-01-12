@@ -1,11 +1,24 @@
 import Config
 
+database_url = System.get_env("DATABASE_URL")
+
+parsed_url =
+  URI.parse(database_url || "postgresql://postgres:postgres@localhost:5433/automated_agency_dev")
+
+[username, password] =
+  if parsed_url.userinfo,
+    do: String.split(parsed_url.userinfo, ":"),
+    else: ["postgres", "postgres"]
+
+database = String.trim_leading(parsed_url.path || "/automated_agency_dev", "/")
+
 # Configure your database
 config :automated_agency, AutomatedAgency.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "automated_agency_dev",
+  database: database,
+  username: username,
+  password: password,
+  hostname: parsed_url.host,
+  port: parsed_url.port,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
