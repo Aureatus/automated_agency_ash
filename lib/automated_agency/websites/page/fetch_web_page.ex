@@ -1,6 +1,7 @@
 defmodule AutomatedAgency.Websites.Page.Fetch do
   use Ash.Resource.Change
   alias Wallaby.{Browser, WebdriverClient}
+  alias AutomatedAgency.Websites.Screenshot.ImageOptimiser
 
   @desktop_width 1920
   @desktop_height 1080
@@ -32,8 +33,12 @@ defmodule AutomatedAgency.Websites.Page.Fetch do
     with {:ok, session} <- Wallaby.start_session(),
          session = Browser.visit(session, url),
          html = Browser.page_source(session),
-         desktop_screenshot = get_screenshot(session, :desktop),
-         mobile_screenshot = get_screenshot(session, :mobile),
+         desktop_screenshot =
+           get_screenshot(session, :desktop)
+           |> ImageOptimiser.optimise_image(:desktop),
+         mobile_screenshot =
+           get_screenshot(session, :mobile)
+           |> ImageOptimiser.optimise_image(:mobile),
          :ok <- Wallaby.end_session(session) do
       {:ok,
        %{
