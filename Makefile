@@ -51,6 +51,15 @@ setup-env: ## Setup environment variables
 		cp frontend/.env.local.template frontend/.env.local; \
 		echo "frontend/.env.local created"; \
 	fi
+	@current_key=$$(grep "^OPENAI_API_KEY=" .env | cut -d= -f2); \
+	if [ -z "$$current_key" ]; then \
+		read -p "Please enter your OpenAI API key: " api_key; \
+		if [ -z "$$api_key" ]; then \
+			echo "OpenAI API key is required. Setup cannot continue."; \
+			exit 1; \
+		fi; \
+		sed -i.bak "s|^OPENAI_API_KEY=.*$$|OPENAI_API_KEY=$$api_key|" .env && rm .env.bak; \
+	fi
 
 setup-db: ## Setup database and run migrations
 	@echo "Setting up database..."
@@ -73,6 +82,10 @@ check-deps:
 	@if [ ! -f $(SETUP_COMPLETE_FILE) ]; then \
 		echo "First time setup required. Running setup..."; \
 		$(MAKE) setup; \
+	fi
+	@if ! grep -q "^OPENAI_API_KEY=." .env; then \
+		echo "OpenAI API key is missing. Please add OPENAI_API_KEY=your_key_here to your .env file"; \
+		exit 1; \
 	fi
 
 dev: check-deps ## Start development environment with tmux
