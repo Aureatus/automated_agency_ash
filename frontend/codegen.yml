@@ -1,0 +1,11 @@
+schema: "../priv/schema.graphql"
+documents: "src/lib/graphql/**/*.ts"
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withHooks: true
+      withRefetchFn: true

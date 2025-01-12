@@ -32,3 +32,6 @@ localhost-key.pem
 
 # Docker volumes
 postgres_data/
+
+# Generated graphql schema
+src/generated/graphql.ts
