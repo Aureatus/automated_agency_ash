@@ -10,7 +10,10 @@ defmodule AutomatedAgency.Websites.Domain.SetupDomain do
       base_html = fetch_page_info(domain_url)
 
       page_urls =
-        extract_internal_links(domain_url, base_html) |> filter_relevant_links(base_html)
+        extract_internal_links(domain_url, base_html)
+        |> filter_relevant_links(base_html)
+        # only keep 9 pages, so that we have 10 pages in addition to the base page. (Lowering costs in development)
+        |> Enum.take(9)
 
       base_page = %{url: domain_url, base_page?: true}
 
