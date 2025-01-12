@@ -1,11 +1,24 @@
 import Config
 
+database_url = System.get_env("DATABASE_URL")
+
+parsed_url =
+  URI.parse(database_url || "postgresql://postgres:postgres@localhost:5433/automated_agency_dev")
+
+[username, password] =
+  if parsed_url.userinfo,
+    do: String.split(parsed_url.userinfo, ":"),
+    else: ["postgres", "postgres"]
+
+database = String.trim_leading(parsed_url.path || "/automated_agency_dev", "/")
+
 # Configure your database
 config :automated_agency, AutomatedAgency.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "automated_agency_dev",
+  database: database,
+  username: username,
+  password: password,
+  hostname: parsed_url.host,
+  port: parsed_url.port,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -23,7 +36,7 @@ config :automated_agency, AutomatedAgencyWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "SPqnwm8LvjVcR+rx0/QqV7ZjN7XdR7BaMN0iktzJPX0g/NPOH4UhauwVf+65NS7m",
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:automated_agency, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:automated_agency, ~w(--watch)]}
