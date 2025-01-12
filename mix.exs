@@ -69,7 +69,8 @@ defmodule AutomatedAgency.MixProject do
       {:readability, "~> 0.12"},
       {:html_entities, "~> 0.5"},
       {:instructor, git: "https://github.com/thmsmlr/instructor_ex.git"},
-      {:req, "~> 0.5.0"}
+      {:req, "~> 0.5.0"},
+      {:image, "~> 0.40.0"}
     ]
   end
 
