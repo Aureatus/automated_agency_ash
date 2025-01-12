@@ -48,3 +48,6 @@ npm-debug.log
 .setup-complete
 tmux-client*.log
 tmux-server*.log
+
+# Graphql schema
+priv/schema.graphql

@@ -2,7 +2,8 @@ defmodule AutomatedAgencyWeb.GraphqlSchema do
   use Absinthe.Schema
 
   use AshGraphql,
-    domains: [AutomatedAgency.Websites]
+    domains: [AutomatedAgency.Websites],
+    generate_sdl_file: "priv/schema.graphql"
 
   import_types Absinthe.Plug.Types
 
