@@ -22,9 +22,6 @@ export const GET_PAGE_WITH_ALL_INFO = gql`
           explanation
         }
       }
-      improvedPage {
-        html
-      }
     }
   }
 `;
