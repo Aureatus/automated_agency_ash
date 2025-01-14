@@ -11,7 +11,7 @@ defmodule AutomatedAgency.Websites.Domain do
     relationships [:pages]
 
     queries do
-      read_one :fetch_domain, :read_by_domain, allow_nil?: false
+      read_one :fetch_domain, :read_by_domain
     end
   end
 
