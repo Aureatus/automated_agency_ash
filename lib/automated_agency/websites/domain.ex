@@ -40,10 +40,9 @@ defmodule AutomatedAgency.Websites.Domain do
       require_atomic? false
     end
 
-    action :fetch_pages_content_for_domain do
+    action :fetch_pages_content_for_domain, :struct do
       argument :domain_id, :uuid, allow_nil?: false
 
-      returns :struct
       constraints instance_of: __MODULE__
 
       run AutomatedAgency.Websites.Domain.FetchDomainContent
