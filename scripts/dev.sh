@@ -35,8 +35,11 @@ cd frontend && npm run codegen && cd ..
 echo "Starting schema watcher..."
 npx chokidar-cli "lib/**/*.{ex,exs}" -c "mix ash.codegen priv/schema.graphql" &
 
-echo "Starting frontend types watcher..."
+echo "Starting frontend types watcher for schema changes..."
 npx chokidar-cli "priv/schema.graphql" -c "cd frontend && npm run codegen" &
+
+echo "Starting frontend types watcher for operation changes..."
+cd frontend && npx graphql-codegen --config ./codegen.yml --watch && cd .. &
 
 # Create and attach to session with mouse mode enabled
 tmux new-session -s dev \; \
