@@ -13,6 +13,14 @@ defmodule AutomatedAgency.Websites.Domain do
     queries do
       read_one :fetch_domain, :read_by_domain
     end
+
+    mutations do
+      create :setup_domain, :create_with_placeholder_pages
+
+      action :populate_domain, :fetch_pages_content_for_domain do
+        error_location :in_result
+      end
+    end
   end
 
   postgres do

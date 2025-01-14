@@ -9,6 +9,12 @@ defmodule AutomatedAgency.Websites.TopicAnalysis do
   graphql do
     type :topic_analysis
     relationships [:keywords]
+
+    mutations do
+      action :create_topic_analysis_from_domain, :create_from_domain do
+        error_location :in_result
+      end
+    end
   end
 
   postgres do
@@ -41,7 +47,7 @@ defmodule AutomatedAgency.Websites.TopicAnalysis do
       argument :domain_id, :uuid, allow_nil?: false
 
       returns :struct
-      constraints instance_of: __MODULE__
+      constraints instance_of: AutomatedAgency.Websites.Domain
 
       run AutomatedAgency.Websites.TopicAnalysis.RunAnalysis
     end

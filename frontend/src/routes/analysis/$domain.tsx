@@ -1,19 +1,69 @@
+import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useGetDomainInfoQuery } from "@/generated/graphql";
+import {
+  useCreateTopicAnalysisFromDomainMutation,
+  useCreateUxAnalysisFromDomainMutation,
+  useGetDomainInfoQuery,
+  usePopulateDomainMutation,
+  useSetupDomainMutation,
+} from "@/generated/graphql";
 
 function AnalysisComponent() {
   const { domain } = Route.useParams();
 
-  const { loading, error, data } = useGetDomainInfoQuery({
+  const [isRunningFallback, setIsRunningFallback] = useState(false);
+
+  const { loading, error, data, refetch } = useGetDomainInfoQuery({
     variables: { domain: decodeURIComponent(domain) },
   });
 
+  const [setupDomain] = useSetupDomainMutation();
+  const [populateDomain] = usePopulateDomainMutation();
+  const [createTopicAnalysisFromDomain] =
+    useCreateTopicAnalysisFromDomainMutation();
+  const [createUxAnalysisFromDomain] = useCreateUxAnalysisFromDomainMutation();
+
+  const handleFallbackProcess = useCallback(async () => {
+    setIsRunningFallback(true);
+    try {
+      const result = await setupDomain({
+        variables: { input: { domain: decodeURIComponent(domain) } },
+      });
+      const domainId = result.data?.setupDomain.result?.id;
+      if (!domainId) throw new Error("Invalid domain id");
+      await populateDomain({ variables: { input: { domainId } } });
+      await createTopicAnalysisFromDomain({
+        variables: { input: { domainId } },
+      });
+      await createUxAnalysisFromDomain({ variables: { input: { domainId } } });
+
+      // Refetch the query after all mutations are done
+      await refetch();
+    } catch (error) {
+      console.error("Fallback process failed:", error);
+    } finally {
+      setIsRunningFallback(false);
+    }
+  }, [
+    domain,
+    setupDomain,
+    populateDomain,
+    createTopicAnalysisFromDomain,
+    createUxAnalysisFromDomain,
+    refetch,
+  ]);
+
+  useEffect(() => {
+    if (!loading && !error && !data?.fetchDomain && !isRunningFallback) {
+      handleFallbackProcess();
+    }
+  }, [loading, error, data, isRunningFallback, handleFallbackProcess]);
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
-  if (!data) return <div>No data received</div>;
+  if (!data?.fetchDomain) return <div>No data received</div>;
 
   const pages = data.fetchDomain?.pages;
 

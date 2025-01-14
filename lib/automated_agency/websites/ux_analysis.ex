@@ -9,6 +9,12 @@ defmodule AutomatedAgency.Websites.UxAnalysis do
   graphql do
     type :ux_analysis
     relationships [:ux_criticisms]
+
+    mutations do
+      action :create_ux_analysis_from_domain, :create_from_domain do
+        error_location :in_result
+      end
+    end
   end
 
   postgres do
@@ -47,7 +53,7 @@ defmodule AutomatedAgency.Websites.UxAnalysis do
       argument :domain_id, :uuid, allow_nil?: false
 
       returns :struct
-      constraints instance_of: __MODULE__
+      constraints instance_of: AutomatedAgency.Websites.Domain
 
       run AutomatedAgency.Websites.UxAnalysis.RunAnalysis
     end
