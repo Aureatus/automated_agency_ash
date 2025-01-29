@@ -50,15 +50,12 @@ const LoadingState = () => (
   </div>
 );
 
-const SetupState = ({ stage }: { stage: (typeof SETUP_STEPS)[number] }) => {
-  if (!stage) return null;
-
-  const steps = [
-    "Domain Setup",
-    "Page Analysis",
-    "Content Analysis",
-    "UX Analysis",
-  ];
+const SetupState = ({
+  currentStage,
+}: {
+  currentStage: (typeof SETUP_STEPS)[number];
+}) => {
+  if (!currentStage) return null;
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
@@ -66,35 +63,37 @@ const SetupState = ({ stage }: { stage: (typeof SETUP_STEPS)[number] }) => {
         <CardContent className="space-y-6 p-8">
           <div className="flex items-center space-x-4 mb-8">
             <Loader2 className="h-6 w-6 animate-spin text-primary" />
-            <p className="text-lg text-muted-foreground">{stage.message}</p>
+            <p className="text-lg text-muted-foreground">
+              {currentStage.message}
+            </p>
           </div>
 
-          {steps.map((step, index) => (
+          {SETUP_STEPS.map(({ step, label }, index) => (
             <div key={index} className="flex items-center space-x-5">
               <div
                 className={`h-12 w-12 rounded-full flex items-center justify-center text-base font-medium
                   ${
-                    index + 1 === stage.step
+                    step === currentStage.step
                       ? "bg-primary text-primary-foreground"
-                      : index + 1 < stage.step
+                      : step < currentStage.step
                         ? "bg-primary/20 text-primary"
                         : "bg-muted/30 text-muted-foreground"
                   }`}
               >
-                {index + 1 < stage.step ? (
+                {step < currentStage.step ? (
                   <Check className="h-6 w-6" />
                 ) : (
-                  <span>{index + 1}</span>
+                  <span>{step}</span>
                 )}
               </div>
               <span
                 className={`text-lg font-medium ${
-                  index + 1 <= stage.step
+                  step <= currentStage.step
                     ? "text-foreground"
                     : "text-muted-foreground"
                 }`}
               >
-                {step}
+                {label}
               </span>
             </div>
           ))}
@@ -184,7 +183,7 @@ function AnalysisComponent() {
 
   if (loading) return <LoadingState />;
   if (error) return <ErrorState message={error.message} />;
-  if (setupStage) return <SetupState stage={setupStage} />;
+  if (setupStage) return <SetupState currentStage={setupStage} />;
   if (!data?.fetchDomain) return <ErrorState message="No data received" />;
 
   const pages = data.fetchDomain?.pages;
