@@ -11,10 +11,24 @@ import {
   useSetupDomainMutation,
 } from "@/generated/graphql";
 
-type SetupStage = {
-  step: number;
-  message: string;
-} | null;
+const SETUP_STEPS = [
+  {
+    step: 1,
+    label: "Domain Setup",
+    message: "Fetching initial domain information",
+  },
+  {
+    step: 2,
+    label: "Page Analysis",
+    message: "Capturing screenshots and analyzing pages",
+  },
+  {
+    step: 3,
+    label: "Content Analysis",
+    message: "Analyzing content and topics",
+  },
+  { step: 4, label: "UX Analysis", message: "Generating UX insights" },
+] as const;
 
 const LoadingState = () => (
   <div className="grid place-items-center min-h-screen">
@@ -36,7 +50,7 @@ const LoadingState = () => (
   </div>
 );
 
-const SetupState = ({ stage }: { stage: SetupStage }) => {
+const SetupState = ({ stage }: { stage: (typeof SETUP_STEPS)[number] }) => {
   if (!stage) return null;
 
   const steps = [
@@ -110,7 +124,9 @@ const ErrorState = ({ message }: { message: string }) => (
 function AnalysisComponent() {
   const { domain } = Route.useParams();
   const [isRunningFallback, setIsRunningFallback] = useState(false);
-  const [setupStage, setSetupStage] = useState<SetupStage>(null);
+  const [setupStage, setSetupStage] = useState<
+    (typeof SETUP_STEPS)[number] | null
+  >(null);
 
   const { loading, error, data, refetch } = useGetDomainInfoQuery({
     variables: { domain: decodeURIComponent(domain) },
@@ -125,28 +141,22 @@ function AnalysisComponent() {
   const handleFallbackProcess = useCallback(async () => {
     setIsRunningFallback(true);
     try {
-      setSetupStage({
-        step: 1,
-        message: "Fetching initial domain information",
-      });
+      setSetupStage(SETUP_STEPS[0]);
       const result = await setupDomain({
         variables: { input: { domain: decodeURIComponent(domain) } },
       });
       const domainId = result.data?.setupDomain.result?.id;
       if (!domainId) throw new Error("Invalid domain id");
 
-      setSetupStage({
-        step: 2,
-        message: "Capturing screenshots and analyzing pages",
-      });
+      setSetupStage(SETUP_STEPS[1]);
       await populateDomain({ variables: { input: { domainId } } });
 
-      setSetupStage({ step: 3, message: "Analyzing content and topics" });
+      setSetupStage(SETUP_STEPS[2]);
       await createTopicAnalysisFromDomain({
         variables: { input: { domainId } },
       });
 
-      setSetupStage({ step: 4, message: "Generating UX insights" });
+      setSetupStage(SETUP_STEPS[3]);
       await createUxAnalysisFromDomain({ variables: { input: { domainId } } });
 
       setSetupStage(null);
