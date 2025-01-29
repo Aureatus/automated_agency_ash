@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { AlertCircle, Check, Loader2 } from "lucide-react";
 import {
   useCreateTopicAnalysisFromDomainMutation,
   useCreateUxAnalysisFromDomainMutation,
@@ -10,115 +9,10 @@ import {
   usePopulateDomainMutation,
   useSetupDomainMutation,
 } from "@/generated/graphql";
-
-const SETUP_STEPS = [
-  {
-    step: 1,
-    label: "Domain Setup",
-    message: "Fetching initial domain information",
-  },
-  {
-    step: 2,
-    label: "Page Analysis",
-    message: "Capturing screenshots and analyzing pages",
-  },
-  {
-    step: 3,
-    label: "Content Analysis",
-    message: "Analyzing content and topics",
-  },
-  { step: 4, label: "UX Analysis", message: "Generating UX insights" },
-] as const;
-
-const LoadingState = () => (
-  <div className="grid place-items-center min-h-screen">
-    <div className="flex flex-col items-center space-y-8">
-      <div className="relative">
-        <Loader2 className="h-16 w-16 animate-spin text-primary" />
-        <div className="absolute inset-0 h-16 w-16 animate-pulse bg-primary/5 rounded-full blur-xl" />
-      </div>
-
-      <div className="flex flex-col items-center gap-3">
-        <p className="text-2xl font-medium text-primary">
-          Loading domain information...
-        </p>
-        <p className="text-base text-muted-foreground">
-          This may take a moment
-        </p>
-      </div>
-    </div>
-  </div>
-);
-
-const SetupState = ({
-  currentStage,
-}: {
-  currentStage: (typeof SETUP_STEPS)[number];
-}) => {
-  if (!currentStage) return null;
-
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
-      <Card className="w-full max-w-2xl bg-card/95 shadow-lg border-0">
-        <CardContent className="space-y-6 p-8">
-          <div className="flex items-center space-x-4 mb-8">
-            <Loader2 className="h-6 w-6 animate-spin text-primary" />
-            <p className="text-lg text-muted-foreground">
-              {currentStage.message}
-            </p>
-          </div>
-
-          {SETUP_STEPS.map(({ step, label }, index) => (
-            <div key={index} className="flex items-center space-x-5">
-              <div
-                className={`h-12 w-12 rounded-full flex items-center justify-center text-base font-medium
-                  ${
-                    step === currentStage.step
-                      ? "bg-primary text-primary-foreground"
-                      : step < currentStage.step
-                        ? "bg-primary/20 text-primary"
-                        : "bg-muted/30 text-muted-foreground"
-                  }`}
-              >
-                {step < currentStage.step ? (
-                  <Check className="h-6 w-6" />
-                ) : (
-                  <span>{step}</span>
-                )}
-              </div>
-              <span
-                className={`text-lg font-medium ${
-                  step <= currentStage.step
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
-              >
-                {label}
-              </span>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-    </div>
-  );
-};
-const ErrorState = ({ message }: { message: string }) => (
-  <div className="grid place-items-center min-h-screen">
-    <div className="flex flex-col items-center space-y-8">
-      <div className="relative">
-        <AlertCircle className="h-16 w-16 text-destructive" />
-        <div className="absolute inset-0 h-16 w-16 animate-pulse bg-destructive/5 rounded-full blur-xl" />
-      </div>
-
-      <div className="flex flex-col items-center gap-3">
-        <p className="text-2xl font-medium text-destructive">Error</p>
-        <p className="text-base text-muted-foreground text-center max-w-md">
-          {message}
-        </p>
-      </div>
-    </div>
-  </div>
-);
+import { LoadingState } from "@/components/analysis/loading";
+import { ErrorState } from "@/components/analysis/error";
+import { SETUP_STEPS } from "@/lib/setup_steps";
+import { SetupState } from "@/components/analysis/setup";
 
 function AnalysisComponent() {
   const { domain } = Route.useParams();
