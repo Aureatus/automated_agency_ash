@@ -18,6 +18,7 @@ function AnalysisComponent() {
   const { loading, error, data, refetch } = useGetDomainInfoQuery({
     variables: { domain: decodeURIComponent(domain) },
   });
+  const [setupStage, setSetupStage] = useState<string | null>(null);
 
   const [setupDomain] = useSetupDomainMutation();
   const [populateDomain] = usePopulateDomainMutation();
@@ -28,18 +29,23 @@ function AnalysisComponent() {
   const handleFallbackProcess = useCallback(async () => {
     setIsRunningFallback(true);
     try {
+      setSetupStage("Fetching initial domain information");
       const result = await setupDomain({
         variables: { input: { domain: decodeURIComponent(domain) } },
       });
       const domainId = result.data?.setupDomain.result?.id;
       if (!domainId) throw new Error("Invalid domain id");
+      setSetupStage("Snapping screenshots...");
       await populateDomain({ variables: { input: { domainId } } });
+      setSetupStage("Generating Topic Analyses...");
       await createTopicAnalysisFromDomain({
         variables: { input: { domainId } },
       });
+      setSetupStage("Generating UX Insights...");
       await createUxAnalysisFromDomain({ variables: { input: { domainId } } });
 
       // Refetch the query after all mutations are done
+      setSetupStage(null);
       await refetch();
     } catch (error) {
       console.error("Fallback process failed:", error);
@@ -63,6 +69,14 @@ function AnalysisComponent() {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
+  if (setupStage)
+    return (
+      <div>
+        Setting up page, current step:
+        <br></br>
+        {setupStage}
+      </div>
+    );
   if (!data?.fetchDomain) return <div>No data received</div>;
 
   const pages = data.fetchDomain?.pages;
