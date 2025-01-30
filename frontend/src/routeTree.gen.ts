@@ -5,6 +5,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as AnalysisDomainImport } from './routes/analysis/$domain'
+import { Route as AnalysisSetupDomainImport } from './routes/analysis/setup/$domain'
 import { Route as AnalysisPagePageIdImport } from './routes/analysis/page/$pageId'
 
 // Create/Update Routes
@@ -16,6 +17,11 @@ const IndexRoute = IndexImport.update({
 
 const AnalysisDomainRoute = AnalysisDomainImport.update({
   path: '/analysis/$domain',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AnalysisSetupDomainRoute = AnalysisSetupDomainImport.update({
+  path: '/analysis/setup/$domain',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -40,6 +46,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnalysisPagePageIdImport
       parentRoute: typeof rootRoute
     }
+    '/analysis/setup/$domain': {
+      preLoaderRoute: typeof AnalysisSetupDomainImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -49,4 +59,5 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AnalysisDomainRoute,
   AnalysisPagePageIdRoute,
+  AnalysisSetupDomainRoute,
 ])
