@@ -28,12 +28,13 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_subnet" "private" {
+  count             = length(var.private_subnet_cidrs)
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.private_subnet_cidr
-  availability_zone = "${var.aws_region}a"
+  cidr_block        = var.private_subnet_cidrs[count.index]
+  availability_zone = "${var.aws_region}${count.index == 0 ? "a" : "b"}"
 
   tags = {
-    Name = "automated-agency-private"
+    Name = "automated-agency-private-${count.index + 1}"
   }
 }
 
@@ -64,6 +65,7 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route_table_association" "private" {
-  subnet_id      = aws_subnet.private.id
+  count          = length(var.private_subnet_cidrs)
+  subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private.id
 }
