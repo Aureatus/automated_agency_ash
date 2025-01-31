@@ -68,4 +68,8 @@ defmodule AutomatedAgency.Websites.Domain do
   relationships do
     has_many :pages, AutomatedAgency.Websites.Page, public?: true
   end
+
+  identities do
+    identity :unique_domain, [:domain]
+  end
 end
