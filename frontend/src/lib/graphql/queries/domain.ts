@@ -24,9 +24,6 @@ export const GET_DOMAIN_WITH_ALL_INFO = gql`
             explanation
           }
         }
-        improvedPage {
-          html
-        }
       }
     }
   }

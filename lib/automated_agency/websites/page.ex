@@ -8,7 +8,7 @@ defmodule AutomatedAgency.Websites.Page do
 
   graphql do
     type :page
-    relationships [:topic_analysis, :ux_analysis, :improved_page]
+    relationships [:topic_analysis, :ux_analysis]
 
     field_names base_page?: :is_base_page, content_fetched?: :is_content_fetched
 

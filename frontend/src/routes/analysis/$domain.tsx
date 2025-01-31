@@ -1,8 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useGetDomainInfoQuery } from "@/generated/graphql";
+import { LoadingState } from "@/components/analysis/loading";
+import { ErrorState } from "@/components/analysis/error";
 
 function AnalysisComponent() {
   const { domain } = Route.useParams();
@@ -11,9 +12,12 @@ function AnalysisComponent() {
     variables: { domain: decodeURIComponent(domain) },
   });
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-  if (!data) return <div>No data received</div>;
+  if (loading) return <LoadingState />;
+  if (error) return <ErrorState message={error.message} />;
+  if (!data?.fetchDomain)
+    return (
+      <Navigate from={Route.fullPath} to="/analysis/setup/$domain" params />
+    );
 
   const pages = data.fetchDomain?.pages;
 
