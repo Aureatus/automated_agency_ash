@@ -1,4 +1,4 @@
-import { SETUP_STEPS } from "@/lib/setup_steps";
+import { SETUP_STEPS } from "@/lib/useSetupDomain";
 import { Loader2, Check } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
