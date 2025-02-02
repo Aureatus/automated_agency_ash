@@ -74,3 +74,59 @@ resource "aws_iam_role_policy" "ecr_access" {
     ]
   })
 }
+
+# GitHub Actions IAM User
+resource "aws_iam_user" "github_actions" {
+  name = "github-actions-automated-agency"
+}
+
+# GitHub Actions Policy
+resource "aws_iam_policy" "github_actions" {
+  name        = "github-actions-automated-agency-policy"
+  description = "Policy for GitHub Actions to push to ECR and deploy to EC2"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:GetRepositoryPolicy",
+          "ecr:DescribeRepositories",
+          "ecr:ListImages",
+          "ecr:DescribeImages",
+          "ecr:BatchGetImage",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:PutImage"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# Attach policy to user
+resource "aws_iam_user_policy_attachment" "github_actions" {
+  user       = aws_iam_user.github_actions.name
+  policy_arn = aws_iam_policy.github_actions.arn
+}
+
+# Create access keys
+resource "aws_iam_access_key" "github_actions" {
+  user = aws_iam_user.github_actions.name
+}
+
+# Output the credentials (these will be used in GitHub Secrets)
+output "github_actions_access_key_id" {
+  value = aws_iam_access_key.github_actions.id
+}
+
+output "github_actions_secret_access_key" {
+  value     = aws_iam_access_key.github_actions.secret
+  sensitive = true
+}
