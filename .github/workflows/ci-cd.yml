@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - setup_infrastructure
 
 env:
   AWS_REGION: eu-west-1
