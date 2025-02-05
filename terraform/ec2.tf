@@ -102,3 +102,18 @@ resource "aws_instance" "app_server" {
     volume_type = "gp2"
   }
 }
+
+# Create Elastic IP
+resource "aws_eip" "app_server" {
+  instance = aws_instance.app_server.id
+  domain   = "vpc"
+
+  tags = {
+    Name = "automated-agency-app-server-eip"
+  }
+}
+
+output "app_server_public_ip" {
+  description = "Public IP of EC2 instance (Elastic IP)"
+  value       = aws_eip.app_server.public_ip
+}
