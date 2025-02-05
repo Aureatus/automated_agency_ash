@@ -20,6 +20,11 @@ resource "aws_iam_role" "ec2_role" {
   }
 }
 
+resource "aws_iam_role_policy_attachment" "systems_manager" {
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
 # Policy to allow EC2 to access Parameter Store
 resource "aws_iam_role_policy" "parameter_store_access" {
   name = "parameter-store-access"
@@ -83,7 +88,7 @@ resource "aws_iam_user" "github_actions" {
 # GitHub Actions Policy
 resource "aws_iam_policy" "github_actions" {
   name        = "github-actions-automated-agency-policy"
-  description = "Policy for GitHub Actions to push to ECR and deploy to EC2"
+  description = "Policy for GitHub Actions to push to ECR and deploy via SSM"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -103,6 +108,15 @@ resource "aws_iam_policy" "github_actions" {
           "ecr:UploadLayerPart",
           "ecr:CompleteLayerUpload",
           "ecr:PutImage"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ec2:DescribeInstances",
+          "ssm:SendCommand",
+          "ssm:GetCommandInvocation"
         ]
         Resource = "*"
       }
